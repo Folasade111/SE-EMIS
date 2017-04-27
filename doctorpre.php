@@ -4,34 +4,33 @@
 //This is the code you connect your database with
 //mysql_select_db("patient") or die (mysql_error());
 $mysqli = new mysqli('localhost','patient','afolasade111','patient');
-
-
 session_start();
 include 'config.php';
-
 if (isset($_POST['register'])){
 	$employee_number= mysqli_real_escape_string($mysqli,$_POST['employee_number']);
-		if ($employee_number == ""){
-			$err= "Please enter your employee_number";
-		}
+		//if ($employee_number == ""){
+		//	$err= "Please enter your employee_number";
+		//}
 		$sql = "SELECT * FROM doctor_info WHERE employee_id = '$employee_number'";
 		$result = mysqli_query($mysqli, $sql);
-		$rows = mysqli_fetch_array($result,MYSQLI_ASSOC);
-		$active = $rows['employee_id'];
-		//$count = mysqli_num_rows($result);
-		$count = sizeof($rows);
-		if($count > 0){
+		$row = mysqli_fetch_array($result,MYSQLI_ASSOC); // ROCKY: this returns the first row (sorry, I told you wrong before)
+		$active = $row['employee_id'];
+		if(isset($active) && $active){ //ROCKY: check if something has been assigned to $active
 			//session_register(" employee_number");
 			$_SESSION['login_user'] = $employee_number;
-			
-			header('Location : http://localhost/doctorpre/login.php');
-			exit;
-			//$err = "Correct employee id";
-			
-		}
-		else{
-			$err = "Enter a correct employee id";
-		}
+			if( !headers_sent() ){
+             header("Location: http://localhost/doctorpre/login.php");
+       }else{
+  ?>
+  <script type="text/javascript">
+  document.location.href="http://localhost/doctorpre/login.php";
+  </script>
+  Redirecting to <a href="http://localhost/doctorpre/login.php">http://localhost/doctorpre/login.php</a>
+  <?php
+}
+die();
+	
+}
 }		
 ?>
 

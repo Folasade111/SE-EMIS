@@ -1,6 +1,6 @@
 <?php
 include 'config.php';
-include ('session.php');
+include 'session.php';
 mysql_select_db("patient") or die (mysql_error());
 if (isset($_POST['register'])){
 	$username = $_POST['username'];
@@ -50,7 +50,6 @@ p{
 			<input type="password" name="password" size = "40">
 			<br>
 			<br>
-}
 <input type="submit" name="register" value="register">
 	</form>
 </body>
